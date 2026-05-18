@@ -18,6 +18,12 @@ func KeygenSeed(mode *SlhDsaMode, seed []byte) ([]byte, []byte) {
 	copy(ctx.PubSeed, pk[:n])
 	copy(ctx.SkSeed, seed[:n])
 
+	defer func() {
+		for i := range ctx.SkSeed {
+			ctx.SkSeed[i] = 0
+		}
+	}()
+
 	root := make([]byte, n)
 	MerkleGenRoot(root, ctx, mode)
 
@@ -41,6 +47,12 @@ func Sign(sk []byte, m []byte, mode *SlhDsaMode) []byte {
 	ctx := NewSpxCtx(n)
 	copy(ctx.SkSeed, skSeed)
 	copy(ctx.PubSeed, pk[:n])
+
+	defer func() {
+		for i := range ctx.SkSeed {
+			ctx.SkSeed[i] = 0
+		}
+	}()
 
 	sig := make([]byte, mode.SigBytes())
 	sigOffset := 0

@@ -74,6 +74,15 @@ func wotsGenLeafAndSign(
 		copy(wotsPk[i*n:(i+1)*n], val)
 	}
 
+	defer func() {
+		for i := range wotsPk {
+			wotsPk[i] = 0
+		}
+		for i := range val {
+			val[i] = 0
+		}
+	}()
+
 	for i := range sk {
 		sk[i] = 0 // basic zeroize
 	}
