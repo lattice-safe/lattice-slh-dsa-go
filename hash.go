@@ -127,12 +127,8 @@ func HashMessage(digest []byte, tree *uint64, leafIdx *uint32, r []byte, pk []by
 	treeBytes := mode.TreeBytes()
 	leafBytes := mode.LeafBytes()
 
-	if mode.D == 1 {
-		*tree = 0
-	} else {
-		*tree = bytesToUint64(buf[fmb:], treeBytes)
-		*tree &= (^uint64(0)) >> (64 - treeBits)
-	}
+	*tree = bytesToUint64(buf[fmb:], treeBytes)
+	*tree &= (^uint64(0)) >> (64 - treeBits)
 
 	*leafIdx = uint32(bytesToUint64(buf[fmb+treeBytes:], leafBytes))
 	*leafIdx &= (^uint32(0)) >> (32 - mode.LeafBits())

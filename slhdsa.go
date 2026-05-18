@@ -33,9 +33,6 @@ func GenerateKey(mode *SlhDsaMode) (*PrivateKey, *PublicKey, error) {
 	}
 
 	pkBytes, skBytes := KeygenSeed(mode, seed)
-	if pkBytes == nil || skBytes == nil {
-		return nil, nil, ErrInvalidSeedLength
-	}
 
 	pk := &PublicKey{
 		Mode: mode,
@@ -59,9 +56,6 @@ func GenerateKeyFromSeed(mode *SlhDsaMode, seed []byte) (*PrivateKey, *PublicKey
 	}
 
 	pkBytes, skBytes := KeygenSeed(mode, seed)
-	if pkBytes == nil || skBytes == nil {
-		return nil, nil, ErrInvalidSeedLength
-	}
 
 	pk := &PublicKey{
 		Mode: mode,
@@ -83,11 +77,7 @@ func (sk *PrivateKey) Sign(msg []byte) ([]byte, error) {
 		return nil, ErrInvalidKeyLength
 	}
 
-	sig := Sign(sk.Sk, msg, sk.Mode)
-	if sig == nil {
-		return nil, ErrInvalidKeyLength
-	}
-	return sig, nil
+	return Sign(sk.Sk, msg, sk.Mode), nil
 }
 
 // Verify checks if the provided signature is valid for the given message.

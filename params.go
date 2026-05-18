@@ -20,14 +20,7 @@ type SlhDsaMode struct {
 }
 
 func (m *SlhDsaMode) WotsLogW() int {
-	switch m.WotsW {
-	case 256:
-		return 8
-	case 16:
-		return 4
-	default:
-		return 4
-	}
+	return 4 // FIPS 205 only uses W=16
 }
 
 func (m *SlhDsaMode) WotsLen1() int {
@@ -35,19 +28,7 @@ func (m *SlhDsaMode) WotsLen1() int {
 }
 
 func (m *SlhDsaMode) WotsLen2() int {
-	if m.WotsW == 16 {
-		if m.N <= 8 {
-			return 2
-		} else if m.N <= 136 {
-			return 3
-		} else {
-			return 4
-		}
-	} else if m.N <= 1 {
-		return 1
-	} else {
-		return 2
-	}
+	return 3 // Always 3 for FIPS 205 modes
 }
 
 func (m *SlhDsaMode) WotsLen() int {
