@@ -135,13 +135,6 @@ func TestErrorPaths(t *testing.T) {
 }
 
 func TestCoverageEdgeCases(t *testing.T) {
-	// Cover baseW w=256
-	out := make([]uint32, 2)
-	baseW(out, 2, []byte{0xab, 0xcd}, 256)
-	if out[0] != 0xab {
-		t.Error("baseW 256 failed")
-	}
-
 	// Cover bytesToUint32
 	if bytesToUint32([]byte{0x12, 0x34, 0x56, 0x78}) != 0x12345678 {
 		t.Error("bytesToUint32 failed")
@@ -152,7 +145,7 @@ func TestCoverageEdgeCases(t *testing.T) {
 	sha256hash(longOut, [][]byte{{0x01}})
 
 	// Cover HashMessage with D=1
-	modeD1 := &SlhDsaMode{D: 1, N: 16, Hash: HashSha2, ForsTrees: 14, ForsHeight: 12, FullHeight: 20, WotsW: 16}
+	modeD1 := &SlhDsaMode{D: 1, N: 16, Hash: HashSha2, ForsTrees: 14, ForsHeight: 12, FullHeight: 20}
 	d1Ctx := NewSpxCtx(16)
 	d1Addr := new(Addr)
 	var tree uint64
@@ -163,7 +156,7 @@ func TestCoverageEdgeCases(t *testing.T) {
 	}
 
 	// Cover HashMessage with HashShake and D=1
-	modeD1Shake := &SlhDsaMode{D: 1, N: 16, Hash: HashShake, ForsTrees: 14, ForsHeight: 12, FullHeight: 20, WotsW: 16}
+	modeD1Shake := &SlhDsaMode{D: 1, N: 16, Hash: HashShake, ForsTrees: 14, ForsHeight: 12, FullHeight: 20}
 	HashMessage(make([]byte, modeD1Shake.ForsMsgBytes()), &tree, &leaf, make([]byte, modeD1Shake.N), make([]byte, modeD1Shake.PkBytes()), []byte("msg"), modeD1Shake)
 
 	// Cover WotsSign

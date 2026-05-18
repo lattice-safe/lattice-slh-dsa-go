@@ -1,13 +1,6 @@
 package slhdsa
 
-func baseW(output []uint32, outLen int, input []byte, w int) {
-	var logw uint32
-	if w == 16 {
-		logw = 4
-	} else {
-		logw = 8
-	}
-
+func baseW(output []uint32, outLen int, input []byte) {
 	inIdx := 0
 	var bits uint32 = 0
 	var total uint32 = 0
@@ -18,8 +11,8 @@ func baseW(output []uint32, outLen int, input []byte, w int) {
 			inIdx++
 			bits += 8
 		}
-		bits -= logw
-		output[i] = (total >> bits) & uint32(w-1)
+		bits -= 4
+		output[i] = (total >> bits) & 15
 	}
 }
 
@@ -27,10 +20,10 @@ func wotsChecksum(csumOutput []uint32, msgBaseW []uint32, mode *SlhDsaMode) {
 	var csum uint32 = 0
 	len1 := mode.WotsLen1()
 	for i := 0; i < len1; i++ {
-		csum += uint32(mode.WotsW-1) - msgBaseW[i]
+		csum += 15 - msgBaseW[i]
 	}
 
-	csumBits := mode.WotsLen2() * mode.WotsLogW()
+	csumBits := mode.WotsLen2() * 4
 	csum <<= (8 - (csumBits % 8)) % 8
 
 	csumBytes := (csumBits + 7) / 8
@@ -39,11 +32,11 @@ func wotsChecksum(csumOutput []uint32, msgBaseW []uint32, mode *SlhDsaMode) {
 		csumBuf[i] = byte(csum >> (8 * (csumBytes - 1 - i)))
 	}
 
-	baseW(csumOutput, mode.WotsLen2(), csumBuf, mode.WotsW)
+	baseW(csumOutput, mode.WotsLen2(), csumBuf)
 }
 
 func ChainLengths(lengths []uint32, msg []byte, mode *SlhDsaMode) {
-	baseW(lengths, mode.WotsLen1(), msg, mode.WotsW)
+	baseW(lengths, mode.WotsLen1(), msg)
 	len1 := mode.WotsLen1()
 	csumOut := make([]uint32, mode.WotsLen2())
 	wotsChecksum(csumOut, lengths[:len1], mode)
@@ -64,7 +57,7 @@ func genChain(out []byte, input []byte, start uint32, steps uint32, ctx *SpxCtx,
 func WotsPkFromSig(pk []byte, sig []byte, msg []byte, ctx *SpxCtx, addr *Addr, mode *SlhDsaMode) {
 	wotsLen := mode.WotsLen()
 	n := mode.N
-	w := uint32(mode.WotsW)
+	w := uint32(16)
 
 	lengths := make([]uint32, wotsLen)
 	ChainLengths(lengths, msg, mode)

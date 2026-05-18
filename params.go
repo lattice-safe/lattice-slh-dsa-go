@@ -16,23 +16,18 @@ type SlhDsaMode struct {
 	D          int
 	ForsHeight int
 	ForsTrees  int
-	WotsW      int
-}
-
-func (m *SlhDsaMode) WotsLogW() int {
-	return 4 // FIPS 205 only uses W=16
 }
 
 func (m *SlhDsaMode) WotsLen1() int {
-	return 8 * m.N / m.WotsLogW()
+	return 2 * m.N
 }
 
 func (m *SlhDsaMode) WotsLen2() int {
-	return 3 // Always 3 for FIPS 205 modes
+	return 3
 }
 
 func (m *SlhDsaMode) WotsLen() int {
-	return m.WotsLen1() + m.WotsLen2()
+	return 2*m.N + 3
 }
 
 func (m *SlhDsaMode) WotsBytes() int {
@@ -100,7 +95,6 @@ var SlhDsaShake128s = &SlhDsaMode{
 	D:          7,
 	ForsHeight: 12,
 	ForsTrees:  14,
-	WotsW:      16,
 }
 var SlhDsaShake128f = &SlhDsaMode{
 	Name:       "SLH-DSA-SHAKE-128f",
@@ -110,7 +104,6 @@ var SlhDsaShake128f = &SlhDsaMode{
 	D:          22,
 	ForsHeight: 6,
 	ForsTrees:  33,
-	WotsW:      16,
 }
 var SlhDsaShake192s = &SlhDsaMode{
 	Name:       "SLH-DSA-SHAKE-192s",
@@ -120,7 +113,6 @@ var SlhDsaShake192s = &SlhDsaMode{
 	D:          7,
 	ForsHeight: 14,
 	ForsTrees:  17,
-	WotsW:      16,
 }
 var SlhDsaShake192f = &SlhDsaMode{
 	Name:       "SLH-DSA-SHAKE-192f",
@@ -130,7 +122,6 @@ var SlhDsaShake192f = &SlhDsaMode{
 	D:          22,
 	ForsHeight: 8,
 	ForsTrees:  33,
-	WotsW:      16,
 }
 var SlhDsaShake256s = &SlhDsaMode{
 	Name:       "SLH-DSA-SHAKE-256s",
@@ -140,7 +131,6 @@ var SlhDsaShake256s = &SlhDsaMode{
 	D:          8,
 	ForsHeight: 14,
 	ForsTrees:  22,
-	WotsW:      16,
 }
 var SlhDsaShake256f = &SlhDsaMode{
 	Name:       "SLH-DSA-SHAKE-256f",
@@ -150,7 +140,6 @@ var SlhDsaShake256f = &SlhDsaMode{
 	D:          17,
 	ForsHeight: 9,
 	ForsTrees:  35,
-	WotsW:      16,
 }
 
 // FIPS 205 parameter sets — SHA-2 variants
@@ -162,7 +151,6 @@ var SlhDsaSha2_128s = &SlhDsaMode{
 	D:          7,
 	ForsHeight: 12,
 	ForsTrees:  14,
-	WotsW:      16,
 }
 var SlhDsaSha2_128f = &SlhDsaMode{
 	Name:       "SLH-DSA-SHA2-128f",
@@ -172,7 +160,6 @@ var SlhDsaSha2_128f = &SlhDsaMode{
 	D:          22,
 	ForsHeight: 6,
 	ForsTrees:  33,
-	WotsW:      16,
 }
 var SlhDsaSha2_192s = &SlhDsaMode{
 	Name:       "SLH-DSA-SHA2-192s",
@@ -182,7 +169,6 @@ var SlhDsaSha2_192s = &SlhDsaMode{
 	D:          7,
 	ForsHeight: 14,
 	ForsTrees:  17,
-	WotsW:      16,
 }
 var SlhDsaSha2_192f = &SlhDsaMode{
 	Name:       "SLH-DSA-SHA2-192f",
@@ -192,7 +178,6 @@ var SlhDsaSha2_192f = &SlhDsaMode{
 	D:          22,
 	ForsHeight: 8,
 	ForsTrees:  33,
-	WotsW:      16,
 }
 var SlhDsaSha2_256s = &SlhDsaMode{
 	Name:       "SLH-DSA-SHA2-256s",
@@ -202,7 +187,6 @@ var SlhDsaSha2_256s = &SlhDsaMode{
 	D:          8,
 	ForsHeight: 14,
 	ForsTrees:  22,
-	WotsW:      16,
 }
 var SlhDsaSha2_256f = &SlhDsaMode{
 	Name:       "SLH-DSA-SHA2-256f",
@@ -212,5 +196,4 @@ var SlhDsaSha2_256f = &SlhDsaMode{
 	D:          17,
 	ForsHeight: 9,
 	ForsTrees:  35,
-	WotsW:      16,
 }

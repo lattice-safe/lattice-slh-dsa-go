@@ -56,14 +56,14 @@ func wotsGenLeafAndSign(
 				copy(wotsSig[i*n:(i+1)*n], val)
 			}
 
-			for j := steps[i]; j < uint32(mode.WotsW-1); j++ {
+			for j := steps[i]; j < uint32(15); j++ {
 				SetHashAddr(&leafAddr, j, mode)
 				tmp := make([]byte, n)
 				copy(tmp, val)
 				Thash(val, tmp, 1, ctx, &leafAddr, mode)
 			}
 		} else {
-			for j := uint32(0); j < uint32(mode.WotsW-1); j++ {
+			for j := uint32(0); j < uint32(15); j++ {
 				SetHashAddr(&leafAddr, j, mode)
 				tmp := make([]byte, n)
 				copy(tmp, val)
